@@ -28,7 +28,7 @@ namespace FTServerCode
             if (FTServerCode.receivedPath.Length > 0)
                 backgroundWorker1.RunWorkerAsync();
             else
-                MessageBox.Show("Please select file receiving path");
+                MessageBox.Show("Porfavor seleccione una ruta de recepcion");
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -52,6 +52,16 @@ namespace FTServerCode
                 FTServerCode.receivedPath = fd.SelectedPath;
             }
         }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
     }
     //FILE TRANSFER USING C#.NET SOCKET - SERVER
     class FTServerCode
@@ -65,21 +75,21 @@ namespace FTServerCode
            sock.Bind(ipEnd);
         }
         public static string receivedPath;
-        public static string curMsg = "Stopped";
+        public static string curMsg = "Detenido";
         public  void StartServer()
         {
             try
             {
-                curMsg = "Starting...";
+                curMsg = "Iniciando...";
                 sock.Listen(100);
 
-                curMsg = "Running and waiting to receive file.";
+                curMsg = "Corriendo y esperando a recibir archivo.";
                 Socket clientSock = sock.Accept();
 
                 byte[] clientData = new byte[1024 * 5000];
                 
                 int receivedBytesLen = clientSock.Receive(clientData);
-                curMsg = "Receiving data...";
+                curMsg = "Recibiendo datos...";
 
                 int fileNameLen = BitConverter.ToInt32(clientData, 0);
                 string fileName = Encoding.ASCII.GetString(clientData, 4, fileNameLen);
@@ -87,15 +97,15 @@ namespace FTServerCode
                 BinaryWriter bWrite = new BinaryWriter(File.Open(receivedPath +"/"+ fileName, FileMode.Append)); ;
                 bWrite.Write(clientData, 4 + fileNameLen, receivedBytesLen - 4 - fileNameLen);
 
-                curMsg = "Saving file...";
+                curMsg = "Guardando archivo...";
 
                 bWrite.Close();
                 clientSock.Close();
-                curMsg = "Reeived & Saved file; Server Stopped.";
+                curMsg = "Archivo recibido y guardado; Servidor Detenido.";
             }
             catch (Exception ex)
             {
-                curMsg = "File Receving error.";
+                curMsg = "Error recibiendo archivo.";
             }
         }
     }
